@@ -1,0 +1,22 @@
+parameters:
+#    parameter_name: value
+
+services:
+    fs.search_strategy.naive:
+        class: FSBundle\Search\Strategy\NaiveStrategy
+
+    fs.search_strategy.efficient:
+        class: FSBundle\Search\Strategy\EfficientStrategy
+
+    fs.search_strategy.regexp:
+        class: FSBundle\Search\Strategy\RegexpStrategy
+
+    fs.command.file_search:
+      class: FSBundle\Command\FileSearchCommand
+      calls:
+      #this could be done with tags and a compiler pass but we can keep it simple here
+        - [addStrategy, ["@fs.search_strategy.naive"]]
+        - [addStrategy, ["@fs.search_strategy.efficient"]]
+        - [addStrategy, ["@fs.search_strategy.regexp"]]
+      tags:
+        - { name: console.command }
